@@ -1,0 +1,81 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial gpsSerial(4, 3); // RX, TX for GPS
+SoftwareSerial gsmSerial(7, 8); // RX, TX for GSM
+
+String latitude = "";
+String longitude = "";
+
+const int vibrationPin = 2;  // Connect vibration sensor here
+bool accidentDetected = false;
+
+// Phone numbers (easily change family contact)
+String familyNumber = "+91xxxxxxxxxx";
+String ambulanceNumber = "+91yyyyyyyyyy";
+String hospitalNumber = "+91zzzzzzzzzz";
+
+void setup() {
+  Serial.begin(9600);
+  gpsSerial.begin(9600);
+  gsmSerial.begin(9600);
+  pinMode(vibrationPin, INPUT);
+
+  delay(1000);
+  sendSMS("System Ready. Monitoring accidents...");
+}
+
+void loop() {
+  if (digitalRead(vibrationPin) == HIGH) {
+    accidentDetected = true;
+    Serial.println("Accident Detected!");
+
+    getGPSLocation();
+    notifyAll();
+    makeEmergencyCall();
+    delay(10000);  // wait to prevent multiple alerts
+    accidentDetected = false;
+  }
+}
+
+void getGPSLocation() {
+  while (gpsSerial.available()) {
+    String gpsData = gpsSerial.readStringUntil('\n');
+    if (gpsData.startsWith("$GPGGA")) {
+      // Parse GPS Data (basic version)
+      int commaIndex1 = gpsData.indexOf(',') + 1;
+      int commaIndex2 = gpsData.indexOf(',', commaIndex1);
+      latitude = gpsData.substring(commaIndex1, commaIndex2);
+      
+      commaIndex1 = gpsData.indexOf(',', commaIndex2 + 1) + 1;
+      commaIndex2 = gpsData.indexOf(',', commaIndex1);
+      longitude = gpsData.substring(commaIndex1, commaIndex2);
+      break;
+    }
+  }
+}
+
+void notifyAll() {
+  String msg = "Accident Detected!\nLocation:\nLat: " + latitude + "\nLon: " + longitude +
+               "\nGoogle Maps: https://maps.google.com/?q=" + latitude + "," + longitude;
+
+  sendSMS("To Ambulance: " + msg, ambulanceNumber);
+  sendSMS("To Hospital: " + msg, hospitalNumber);
+  sendSMS("To Family: " + msg, familyNumber);
+}
+
+void sendSMS(String message, String number) {
+  gsmSerial.println("AT+CMGF=1");
+  delay(100);
+  gsmSerial.println("AT+CMGS=\"" + number + "\"");
+  delay(100);
+  gsmSerial.print(message);
+  delay(100);
+  gsmSerial.write(26);  // ASCII for Ctrl+Z
+  delay(1000);
+}
+
+void makeEmergencyCall() {
+  gsmSerial.println("ATD" + ambulanceNumber + ";");
+  delay(20000);  // call for 20 seconds
+  gsmSerial.println("ATH"); // hang up
+}
