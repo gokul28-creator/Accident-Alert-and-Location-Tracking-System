@@ -1,7 +1,5 @@
 # Accient-Alert-and-Location-Tracking-System
 
-# Accident Alert and Location Tracking System (GPS + GSM)
-
 ## 📌 Overview
 Road accidents often result in severe injuries due to delays in emergency response.  
 This project presents an **Accident Alert and Location Tracking System** that uses:
