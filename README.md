@@ -1,4 +1,4 @@
-# Accient-Alert-and-Location-Tracking-System
+# Accident-Alert-and-Location-Tracking-System
 
 ## 📌 Overview
 Road accidents often result in severe injuries due to delays in emergency response.  
