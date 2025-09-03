@@ -1,4 +1,4 @@
-# Accident-Alert-and-Location-Tracking-System
+# Accident Alert and Location Tracking System (GPS + GSM)
 
 ## 📌 Overview
 Road accidents often result in severe injuries due to delays in emergency response.  
@@ -67,3 +67,23 @@ Code file: [`code.c`](code.c.txt)
 - SMS alert sent with location coordinates & Google Maps link.  
 - Automatic emergency calls placed.  
 - System tested successfully in prototype conditions.  
+
+### Example SMS Alert:
+![SMS Alert Screenshot](80f0841b-713f-460d-af53-1bd6d09cd0fe.png)
+
+---
+
+## 📖 Documentation
+- 📑 [Project Report (PDF)](project.report.pdf)  
+- 📊 [Presentation Slides (PPTX)](project.ppt.pptx)  
+
+---
+
+## 🚀 Future Enhancements
+- Mobile App for live tracking.  
+- IoT/Cloud integration for hospital dashboards.  
+- Advanced sensors (accelerometer, gyroscope) to reduce false alerts.  
+- Rechargeable battery with solar charging.  
+- Vehicle system integration (automatic engine cut-off after crash).  
+
+
